@@ -102,3 +102,5 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
         time_total = round(time.time() - start_time, 2)
         print("Total time:", time_total, "seconds")
     return all_file_data_output
+
+__all__ = ["grabMSdata"]

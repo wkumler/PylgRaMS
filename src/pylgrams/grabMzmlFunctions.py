@@ -263,3 +263,5 @@ def timeReport(last_time, text):
     elapsed_time = current_time - last_time
     print(f"{text} - Elapsed time: {timedelta(seconds=elapsed_time)}")
     return current_time
+
+__all__ = ["grabMzmlData"]
