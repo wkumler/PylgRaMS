@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pylgrams"
+dynamic = ["version"]
+description = 'A Python-based gloss of the RaMS package'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "William Kumler", email = "wkumler@uw.edu" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/wkumler/pylgrams#README.md"
+Issues = "https://github.com/wkumler/pylgrams/issues"
+Source = "https://github.com/wkumler/pylgrams"
+
+[tool.hatch.version]
+path = "src/pylgrams/__about__.py"
