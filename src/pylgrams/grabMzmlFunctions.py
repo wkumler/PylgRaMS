@@ -1,6 +1,7 @@
 
 from lxml import etree
 import zlib
+import gzip
 import base64
 import struct
 import math
@@ -200,10 +201,12 @@ def grabSpectraMz(xml_nodes, file_metadata):
             continue
         decoded_binary = base64.b64decode(binary)
         raw_binary = bytes(decoded_binary)
-        if file_metadata['compression'] == 'zlib':  # Assuming zlib compression
-            decomp_binary = zlib.decompress(raw_binary)
-        elif file_metadata['compression'] == 'none':
+        if file_metadata['compression'] == 'none':
             decomp_binary = raw_binary
+        elif file_metadata['compression'] == 'zlib':  # Assuming zlib compression
+            decomp_binary = zlib.decompress(raw_binary)
+        elif file_metadata['compression'] == 'gzip':
+            decomp_binary = zlib.decompress(raw_binary)
         else:
             raise ValueError(f"Unsupported compression type: {file_metadata['compression']}")
         # Read the binary data as doubles (8 bytes for each double value)
@@ -228,10 +231,12 @@ def grabSpectraInt(xml_nodes, file_metadata):
             continue
         decoded_binary = base64.b64decode(binary)
         raw_binary = bytes(decoded_binary)
-        if file_metadata['compression'] == 'zlib':  # Assuming zlib compression
-            decomp_binary = zlib.decompress(raw_binary)
-        elif file_metadata['compression'] == 'none':
+        if file_metadata['compression'] == 'none':
             decomp_binary = raw_binary
+        elif file_metadata['compression'] == 'zlib':
+            decomp_binary = zlib.decompress(raw_binary)
+        elif file_metadata['compression'] == 'gzip':
+            decomp_binary = zlib.decompress(raw_binary)
         else:
             raise ValueError(f"Unsupported compression type: {file_metadata['compression']}")
         num_doubles = len(decomp_binary) // file_metadata['int_precision']
