@@ -194,10 +194,13 @@ def grabMzxmlSpectraPremz(xml_nodes):
     return(premz_vals)
 
 def grabMzxmlSpectraVoltage(xml_nodes):
-    volt_xpath = "d1:collisionEnergy"
-    volt_vals = [float(node.get("collisionEnergy")) for node in xml_nodes]
-    if not volt_vals:
-        return [None] * len(xml_nodes)
+    volt_vals = []
+    for node in xml_nodes:
+        collision_energy_attr = node.get("collisionEnergy")
+        if collision_energy_attr is not None:
+            volt_vals.append(float(collision_energy_attr))
+        else:
+            volt_vals.append(None)
     return(volt_vals)
 
 def timeReport(last_time, text):
