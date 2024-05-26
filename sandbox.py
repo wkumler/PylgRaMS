@@ -33,3 +33,11 @@ bet_chrom = msdata["MS1"][(msdata["MS1"]["mz"]>118.085) & (msdata["MS1"]["mz"]<1
 import seaborn as sns
 sns.relplot(bet_chrom, kind="line", x="rt", y="int")
 
+
+
+
+from pylgrams import grabMSdataCode
+grabMSdataCode.grabMSdata("S30657.mzML.gz")
+
+import pylgrams
+msdata = pylgrams.grabMSdata("src/pylgrams/example_data/S30657.mzML.gz")

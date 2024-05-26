@@ -11,6 +11,7 @@ from tqdm import tqdm
 from functools import reduce
 import time
 from datetime import timedelta
+from .grabMzmlFunctions import grabMzmlData
 
 def grabMSdata(files, grab_what="everything", verbosity=None):
     """Grab mass-spectrometry data from file(s)
@@ -101,9 +102,3 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
         time_total = round(time.time() - start_time, 2)
         print("Total time:", time_total, "seconds")
     return all_file_data_output
-
-def timeReport(last_time, text):
-    current_time = time.time()
-    elapsed_time = current_time - last_time
-    print(f"{text} - Elapsed time: {timedelta(seconds=elapsed_time)}")
-    return current_time

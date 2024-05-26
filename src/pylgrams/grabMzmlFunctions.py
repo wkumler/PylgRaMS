@@ -1,4 +1,17 @@
 
+from lxml import etree
+import zlib
+import base64
+import struct
+import math
+import numpy as np
+import pandas as pd
+import os
+from tqdm import tqdm
+from functools import reduce
+import time
+from datetime import timedelta
+
 def grabMzmlData(filename, grab_what, verbosity=0):
     """Get mass-spectrometry data from an mzML file
 
@@ -244,3 +257,9 @@ def grabSpectraPremz(xml_nodes):
     premz_nodes = [item for sublist in premz_nodes for item in sublist]
     premz_vals = [float(node.get("value")) for node in premz_nodes]
     return(premz_vals)
+
+def timeReport(last_time, text):
+    current_time = time.time()
+    elapsed_time = current_time - last_time
+    print(f"{text} - Elapsed time: {timedelta(seconds=elapsed_time)}")
+    return current_time
