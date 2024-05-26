@@ -26,8 +26,9 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
     Both absolute and relative paths are acceptable.
 
     grab_what: What data should be read from the file? Options include
-    "MS1" for data only from the first spectrometer or "MS2" for fragmentation
-    data. These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
+    "MS1" for data only from the first spectrometer, "MS2" for fragmentation
+    data, "BPC" for a base peak chromatogram, or "TIC" for a total ion chromatogram.
+    These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
     this argument can be set to "everything" to extract all of the above.
 
     verbosity: Three levels of processing output to the console are
@@ -60,7 +61,7 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
         files=[files]
     
     if(grab_what=="everything"):
-        grab_what = ["MS1", "MS2"]
+        grab_what = ["MS1", "MS2", "BPC", "TIC"]
 
     if verbosity is None:
         verbosity = 2 if len(files) == 1 else 1

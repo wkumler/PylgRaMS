@@ -25,8 +25,9 @@ def grabMzmlData(filename, grab_what, verbosity=0):
     Both absolute and relative paths are acceptable.
 
     grab_what: What data should be read from the file? Options include
-    "MS1" for data only from the first spectrometer or "MS2" for fragmentation
-    data. These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
+    "MS1" for data only from the first spectrometer, "MS2" for fragmentation
+    data, "BPC" for a base peak chromatogram, or "TIC" for a total ion chromatogram.
+    These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
     this argument can be set to "everything" to extract all of the above.
 
     verbosity: Three levels of processing output to the console are
@@ -70,11 +71,41 @@ def grabMzmlData(filename, grab_what, verbosity=0):
             last_time = timeReport(last_time, "Reading MS2 data...")
         output_data["MS2"] = grabMzmlMS2(xml_data, file_metadata)
 
+    if "BPC" in grab_what:
+        if verbosity > 1:
+            last_time = timeReport(last_time, "Reading BPC data...")
+        output_data["BPC"] = grabMzmlBPC(xml_data)
+
+    if "TIC" in grab_what:
+        if verbosity > 1:
+            last_time = timeReport(last_time, "Reading TIC data...")
+        output_data["TIC"] = grabMzmlBPC(xml_data, TIC=True)
+
     if verbosity > 1:
         time_total = round(time.time() - last_time, 2)
         print("Total time:", time_total, "seconds")
 
     return output_data
+
+def grabMzmlBPC(xml_data, TIC=False):
+    ms1_xpath = "//d1:spectrum[d1:cvParam[@name=\"ms level\" and @value=\"1\"]][d1:cvParam[@name=\"base peak intensity\"]]"
+    ms1_nodes = xml_data.xpath(ms1_xpath, namespaces={'d1': 'http://psi.hupo.org/ms/mzml'})
+    rt_vals = grabSpectraRt(ms1_nodes)
+
+    if TIC == True:
+        cvparam_name = "total ion current"
+    else:
+        cvparam_name = "base peak intensity"
+    int_xpath = '//d1:cvParam[@name="' + cvparam_name + '"]'
+    int_nodes = xml_data.xpath(int_xpath, namespaces={'d1': 'http://psi.hupo.org/ms/mzml'})
+    int_vals = [float(node.attrib["value"]) for node in int_nodes]
+
+    all_data = pd.DataFrame({
+        'rt': rt_vals,
+        'int': int_vals
+    })
+    return(all_data)
+
 
 def grabMzmlEncodingData(xml_data):
     ns = {'d1': 'http://psi.hupo.org/ms/mzml'}

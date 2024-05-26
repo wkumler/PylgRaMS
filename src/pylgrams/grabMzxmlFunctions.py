@@ -26,8 +26,9 @@ def grabMzxmlData(filename, grab_what, verbosity=0):
     Both absolute and relative paths are acceptable.
 
     grab_what: What data should be read from the file? Options include
-    "MS1" for data only from the first spectrometer or "MS2" for fragmentation
-    data. These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
+    "MS1" for data only from the first spectrometer, "MS2" for fragmentation
+    data, "BPC" for a base peak chromatogram, or "TIC" for a total ion chromatogram.
+    These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
     this argument can be set to "everything" to extract all of the above.
 
     verbosity: Three levels of processing output to the console are
@@ -71,6 +72,16 @@ def grabMzxmlData(filename, grab_what, verbosity=0):
             last_time = timeReport(last_time, "Reading MS2 data...")
         output_data["MS2"] = grabMzxmlMS2(xml_data, file_metadata)
 
+    if "BPC" in grab_what:
+        if verbosity > 1:
+            last_time = timeReport(last_time, "Reading BPC data...")
+        output_data["BPC"] = grabMzxmlBPC(xml_data)
+
+    if "TIC" in grab_what:
+        if verbosity > 1:
+            last_time = timeReport(last_time, "Reading TIC data...")
+        output_data["TIC"] = grabMzxmlBPC(xml_data, TIC=True)
+
     if verbosity > 1:
         time_total = round(time.time() - last_time, 2)
         print("Total time:", time_total, "seconds")
@@ -101,6 +112,25 @@ def grabMzxmlEncodingData(xml_data):
         'precision': precision,
         'endi_enc': endianness_encoding
     }
+
+def grabMzxmlBPC(xml_data, TIC=False):
+    ns = {'d1': 'http://sashimi.sourceforge.net/schema_revision/mzXML_3.2'}
+    ms1_xpath = '//d1:scan[@msLevel="1" and @peaksCount>0]'
+    ms1_nodes = xml_data.xpath(ms1_xpath, namespaces=ns)
+
+    rt_vals = grabMzxmlSpectraRt(ms1_nodes)
+
+    if TIC == True:
+        cvparam_name = "totIonCurrent"
+    else:
+        cvparam_name = "basePeakIntensity"
+    int_vals = [float(node.attrib[cvparam_name]) for node in ms1_nodes]
+
+    all_data = pd.DataFrame({
+        'rt': rt_vals,
+        'int': int_vals
+    })
+    return (all_data)
 
 def grabMzxmlMS1(xml_data, file_metadata):
     ns = {'d1': 'http://sashimi.sourceforge.net/schema_revision/mzXML_3.2'}
