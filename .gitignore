@@ -235,3 +235,8 @@ fabric.properties
 
 # RStudio things
 .Rproj.user
+
+
+
+# Sensitive info
+secret-keys.txt
