@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 import os
 import time
-from datetime import timedelta
 
 def grabMzmlData(filename, grab_what, verbosity=0):
     """Get mass-spectrometry data from an mzML file
@@ -73,7 +72,7 @@ def grabMzmlData(filename, grab_what, verbosity=0):
 
     if verbosity > 1:
         time_total = round(time.time() - last_time, 2)
-        print(f"Total time: {timedelta(seconds=time_total)}")
+        print("Total time:", time_total, "seconds")
 
     return output_data
 
@@ -262,8 +261,8 @@ def grabSpectraPremz(xml_nodes):
 
 def timeReport(last_time, text):
     current_time = time.time()
-    elapsed_time = current_time - last_time
-    print(f"{text} - Elapsed time: {timedelta(seconds=elapsed_time)}")
+    time_total = round(current_time - last_time, 2)
+    print(text, time_total, "seconds")
     return current_time
 
 __all__ = ["grabMzmlData"]
