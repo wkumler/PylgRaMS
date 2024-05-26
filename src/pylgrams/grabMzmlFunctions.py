@@ -19,7 +19,7 @@ def grabMzmlData(filename, grab_what, verbosity=0):
     data. These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
     this argument can be set to "everything" to extract all of the above.
 
-    verbosity: Three levels of processing output to the R console are
+    verbosity: Three levels of processing output to the console are
     available, with increasing verbosity corresponding to higher integers. A
     verbosity of zero means that no output will be produced, useful when
     wrapping within larger functions. A verbosity of 1 will produce a progress

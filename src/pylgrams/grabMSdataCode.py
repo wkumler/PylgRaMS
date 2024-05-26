@@ -2,11 +2,11 @@
 def grabMSdata(files, grab_what="everything", verbosity=None):
     """Grab mass-spectrometry data from file(s)
 
-    The main `RaMS` function. This function accepts a list of the files that will
-    be read into R's working memory and returns a list of `data.table`s
+    The main `pylgrams` function. This function accepts a list of the files that will
+    be read into working memory and returns a list of `data.table`s
     containing the requested information. What information is requested is
-    determined by the `grab_what` argument, which can include MS1, MS2, BPC, TIC,
-    or metadata information. This function serves as a wrapper around both
+    determined by the `grab_what` argument, which can include MS1 or MS2
+     information. This function serves as a wrapper around both
     `grabMzmlData` and `grabMzxmlData` and handles multiple files, but those two
     have also been exposed to the user in case super-simple handling is desired.
     Retention times are reported in minutes, and will be converted automatically
@@ -22,7 +22,7 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
     data. These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
     this argument can be set to "everything" to extract all of the above.
 
-    verbosity: Three levels of processing output to the R console are
+    verbosity: Three levels of processing output to the console are
     available, with increasing verbosity corresponding to higher integers. A
     verbosity of zero means that no output will be produced, useful when
     wrapping within larger functions. A verbosity of 1 will produce a progress
