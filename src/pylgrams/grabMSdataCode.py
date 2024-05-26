@@ -5,6 +5,7 @@ import os
 from tqdm import tqdm
 import time
 from .grabMzmlFunctions import grabMzmlData
+from .grabMzxmlFunctions import grabMzxmlData
 
 def grabMSdata(files, grab_what="everything", verbosity=None):
     """Grab mass-spectrometry data from file(s)
@@ -74,6 +75,8 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
         filename = os.path.basename(file)
         if '.mzml' in filename.lower():
             out_data = grabMzmlData(filename=file, grab_what=grab_what, verbosity=verbosity)
+        elif '.mzxml' in filename.lower():
+            out_data = grabMzxmlData(filename=file, grab_what=grab_what, verbosity=verbosity)
         else:
             raise ValueError(f"Unable to determine file type for {filename}")
         
