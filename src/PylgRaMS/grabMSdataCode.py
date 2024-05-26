@@ -1,5 +1,51 @@
 
 def grabMSdata(files, grab_what="everything", verbosity=None):
+    """Grab mass-spectrometry data from file(s)
+
+    The main `RaMS` function. This function accepts a list of the files that will
+    be read into R's working memory and returns a list of `data.table`s
+    containing the requested information. What information is requested is
+    determined by the `grab_what` argument, which can include MS1, MS2, BPC, TIC,
+    or metadata information. This function serves as a wrapper around both
+    `grabMzmlData` and `grabMzxmlData` and handles multiple files, but those two
+    have also been exposed to the user in case super-simple handling is desired.
+    Retention times are reported in minutes, and will be converted automatically
+    if they are encoded in seconds.
+
+    Parameters
+    ----------
+    files: A character vector of filenames to read into memory.
+    Both absolute and relative paths are acceptable.
+
+    grab_what: What data should be read from the file? Options include
+    "MS1" for data only from the first spectrometer or "MS2" for fragmentation
+    data. These options can be combined (i.e. `grab_data=["MS1", "MS2"]`) or
+    this argument can be set to "everything" to extract all of the above.
+
+    verbosity: Three levels of processing output to the R console are
+    available, with increasing verbosity corresponding to higher integers. A
+    verbosity of zero means that no output will be produced, useful when
+    wrapping within larger functions. A verbosity of 1 will produce a progress
+    bar that updates after each file is read. A verbosity of 2 or higher will
+    produce timing output for each individual file read in. The default, NULL,
+    will select between 1 and 2 depending on the number of files being read: if
+    a single file, verbosity is set to 2; if multiple files, verbosity is set
+    to 1.
+
+    Returns
+    -------
+    A list of Pandas data frames, each named after the arguments requested in
+    grab_what. E.g. ["MS1"] contains MS1 information, ["MS2"] contains fragmentation
+    info, etc. MS1 data has four columns: retention time (rt), mass-to-charge
+    (mz), intensity (int), and filename. MS2 data has six: retention time (rt),
+    precursor m/z (premz), fragment m/z (fragmz), fragment intensity (int),
+    collision energy (voltage), and filename. Data
+    requested that does not exist in the provided files (such as MS2 data
+    requested from MS1-only files) will return an empty (length zero)
+    data frames. The data frames extracted from each of the individual files are
+    collected into one large table.
+
+    """
     if not files:
         raise ValueError("No files provided")
     if isinstance(files, str):
