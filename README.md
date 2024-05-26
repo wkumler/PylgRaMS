@@ -27,11 +27,16 @@ import pylgrams
 
 msdata = pylgrams.grabMSdata("src/pylgrams/example_data/S30657.mzML.gz")
 bet_chrom = msdata["MS1"][(msdata["MS1"]["mz"]>118.085) & (msdata["MS1"]["mz"]<118.087)]
+bet_chrom = bet_chrom[(bet_chrom["rt"]>7) & (bet_chrom["rt"]<9)]
 sns.relplot(bet_chrom, kind="line", x="rt", y="int")
 plt.show()
 
-directory_path = "src/pylgrams/example_data/"
-only_mzML_files_os = [os.path.join(directory_path, f) for f in os.listdir(directory_path) if f.endswith('.mzML.gz')]
+bet_frags = msdata["MS2"][(msdata["MS2"]["premz"]>118.0865) & (msdata["MS2"]["premz"]<118.0867)]
+plt.stem(bet_frags["fragmz"], bet_frags["int"], linefmt='-k', markerfmt='ko', basefmt=" ")
+plt.show()
+
+dir_path = "src/pylgrams/example_data/"
+only_mzML_files_os = [os.path.join(dir_path, f) for f in os.listdir(dir_path) if f.endswith('.mzML.gz')]
 msdata = pylgrams.grabMSdata(only_mzML_files_os)
 bet_chrom = msdata["MS1"][(msdata["MS1"]["mz"]>118.085) & (msdata["MS1"]["mz"]<118.087)]
 sns.relplot(bet_chrom, kind="line", x="rt", y="int", hue="filename")
