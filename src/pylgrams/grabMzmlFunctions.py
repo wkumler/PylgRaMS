@@ -88,16 +88,18 @@ def grabMzmlData(filename, grab_what, verbosity=0):
     return output_data
 
 def grabMzmlBPC(xml_data, TIC=False):
-    ms1_xpath = "//d1:spectrum[d1:cvParam[@name=\"ms level\" and @value=\"1\"]][d1:cvParam[@name=\"base peak intensity\"]]"
-    ms1_nodes = xml_data.xpath(ms1_xpath, namespaces={'d1': 'http://psi.hupo.org/ms/mzml'})
-    rt_vals = grabSpectraRt(ms1_nodes)
-
     if TIC == True:
         cvparam_name = "total ion current"
     else:
         cvparam_name = "base peak intensity"
-    int_xpath = '//d1:cvParam[@name="' + cvparam_name + '"]'
-    int_nodes = xml_data.xpath(int_xpath, namespaces={'d1': 'http://psi.hupo.org/ms/mzml'})
+
+    ms1_xpath = "//d1:spectrum[d1:cvParam[@name=\"ms level\" and @value=\"1\"]][d1:cvParam[@name=\"" + cvparam_name + "\"]]"
+    ms1_nodes = xml_data.xpath(ms1_xpath, namespaces={'d1': 'http://psi.hupo.org/ms/mzml'})
+    rt_vals = grabSpectraRt(ms1_nodes)
+
+    int_xpath = 'd1:cvParam[@name="' + cvparam_name + '"]'
+    int_nodes = [node.xpath(int_xpath, namespaces={'d1': 'http://psi.hupo.org/ms/mzml'}) for node in ms1_nodes]
+    int_nodes = [item for sublist in int_nodes for item in sublist]
     int_vals = [float(node.attrib["value"]) for node in int_nodes]
 
     all_data = pd.DataFrame({

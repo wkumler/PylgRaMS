@@ -60,7 +60,7 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
     if isinstance(files, str):
         files=[files]
     
-    if(grab_what=="everything"):
+    if grab_what=="everything":
         grab_what = ["MS1", "MS2", "BPC", "TIC"]
 
     if verbosity is None:
@@ -83,6 +83,8 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
         
         out_data["MS1"]["filename"] = filename
         out_data["MS2"]["filename"] = filename
+        out_data["BPC"]["filename"] = filename
+        out_data["TIC"]["filename"] = filename
         all_file_data[filename] = out_data
         
         if verbosity > 0 and len(files) >= 2:
@@ -93,6 +95,10 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
     all_file_data_output["MS1"] = pd.concat(all_file_ms1, ignore_index=True)
     all_file_ms2 = [file_data['MS2'] for file_data in all_file_data.values() if 'MS2' in file_data]
     all_file_data_output["MS2"] = pd.concat(all_file_ms2, ignore_index=True)
+    all_file_bpc = [file_data['BPC'] for file_data in all_file_data.values() if 'BPC' in file_data]
+    all_file_data_output["BPC"] = pd.concat(all_file_bpc, ignore_index=True)
+    all_file_tic = [file_data['TIC'] for file_data in all_file_data.values() if 'TIC' in file_data]
+    all_file_data_output["TIC"] = pd.concat(all_file_tic, ignore_index=True)
     if verbosity > 0:
         if len(files) >= 2:
             pb.close()
