@@ -1,0 +1,42 @@
+# This workflow will install Python dependencies and run tests with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: pylgrams
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.python }})
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: windows-latest, python: "3.12.3"}
+          - {os: macOS-latest, python: "3.12.3"}
+          - {os: ubuntu-latest, python: "3.12.3"}
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.12.3
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.12.3"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Test with pytest
+      run: |
+        pytest
