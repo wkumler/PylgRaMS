@@ -106,4 +106,4 @@ def grabMSdata(files, grab_what="everything", verbosity=None):
         print("Total time:", time_total, "seconds")
     return all_file_data_output
 
-__all__ = ["grabMSdata"]
+__all__ = ["grabMSdata", "grabMzmlData", "grabMzxmlData"]

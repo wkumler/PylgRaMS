@@ -10,8 +10,10 @@ from lxml import etree
 
 from .grabMSdataCode import grabMSdata
 from .grabMzmlFunctions import grabMzmlData
+from .grabMzxmlFunctions import grabMzxmlData
 
 __all__ = [
     'grabMSdata',
-    'grabMzmlData'
+    'grabMzmlData',
+    'grabMzxmlData'
 ]
