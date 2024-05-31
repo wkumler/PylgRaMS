@@ -3,19 +3,9 @@ A Python language gloss of the [RaMS package](https://github.com/wkumler/RaMS) f
 
 The package currently lacks much of the expanded functionality of RaMS and is currently comparable to RaMS v1.0. I don't have plans to expand this much further - for additional functionality, consider using the [rpy2 package](https://rpy2.github.io/) to port the R code directly.
 
-## Setup
+## Installation
 
-### Local installation
-`pip install .`
-
-### Build
-`py -m build`
-
-### Deploy 
-`py -m twine upload --repository testpypi dist/*`
-
-### Installation from testpypi
-`pip install -i https://test.pypi.org/simple/ pylgrams==0.1.1`
+`pip install pylgrams`
 
 ## Demo
 
